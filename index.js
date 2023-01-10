@@ -16,7 +16,7 @@ const pool = new Pool({
   database: process.env.DATABASE,
   host: process.env.HOST,
   user: process.env.USER,
-  port: process.env.PORT,
+  port: 5432, 
   password: process.env.PASSWORD,
 });
 
@@ -27,10 +27,10 @@ app.get("/", (req, res) => {
 
 // endpoint to get one random quote from quotes table in database
 app.get("/quote", (req, res) => {
-  const randomQuoteNumber = Math.ceil(Math.random() * (1640-1)+1);
-  const quoteQuery = `SELECT $1,$2 FROM quotes WHERE id=$3`
+  const randomQuoteNumber = Math.ceil(Math.random() * (1640 - 1) + 1);
+  const quoteQuery = `SELECT quote_text,quote_author FROM quotes WHERE quote_id=$3`;
   pool
-    .query(quoteQuery, [text, author, randomQuoteNumber])
+    .query(quoteQuery, [randomQuoteNumber])
     .then((result) => res.json(result))
     .catch((error) => res.status(500).json(error));
 });
