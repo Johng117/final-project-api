@@ -11,12 +11,21 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 
+// 
+app.use(express.static(path.join(__dirname, "build")));
+
+if (process.env.NODE_ENV === "production") {
+  app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
+  });
+}
+
 // create instance of pool with config credentials
 const pool = new Pool({
   database: process.env.DATABASE,
   host: process.env.HOST,
   user: process.env.USER,
-  port: 5432, 
+  port: 5432,
   password: process.env.PASSWORD,
 });
 
@@ -28,10 +37,10 @@ app.get("/", (req, res) => {
 // endpoint to get one random quote from quotes table in database
 app.get("/quote", (req, res) => {
   const randomQuoteNumber = Math.ceil(Math.random() * (1640 - 1) + 1);
-  const quoteQuery = `SELECT quote_text,quote_author FROM quotes WHERE quote_id=$3`;
+  const quoteQuery = `SELECT quote_text,quote_author FROM quotes WHERE quote_id=$1`;
   pool
     .query(quoteQuery, [randomQuoteNumber])
-    .then((result) => res.json(result))
+    .then((result) => res.json(result.rows))
     .catch((error) => res.status(500).json(error));
 });
 
