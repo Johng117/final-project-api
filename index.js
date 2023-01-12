@@ -1,5 +1,6 @@
 // require the packages needed for the api
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const helmet = require("helmet");
 const PORT = process.env.PORT || 3001;
@@ -11,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 
-// 
+//
 app.use(express.static(path.join(__dirname, "build")));
 
 if (process.env.NODE_ENV === "production") {
