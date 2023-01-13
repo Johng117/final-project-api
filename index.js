@@ -37,13 +37,12 @@ app.get("/", (req, res) => {
 
 // endpoint to get one random quote from quotes table in database
 app.get("/quote", (req, res) => {
-  // const randomQuoteNumber = Math.ceil(Math.random() * (1640 - 1) + 1);
-  // const quoteQuery = `SELECT quote_text,quote_author FROM quotes WHERE quote_id=$1`;
-  // pool
-  //   .query(quoteQuery, [randomQuoteNumber])
-  //   .then((result) => res.json(result.rows))
-  //   .catch((error) => res.status(500).json(error));
-  res.send({ quote_text: "john", quote_author: "g" });
+  const randomQuoteNumber = Math.ceil(Math.random() * (1640 - 1) + 1);
+  const quoteQuery = `SELECT quote_text,quote_author FROM quotes WHERE quote_id=$1`;
+  pool
+    .query(quoteQuery, [randomQuoteNumber])
+    .then((result) => res.json(result))
+    .catch((error) => res.status(500).json(error));
 });
 
 app.listen(PORT, () => {
