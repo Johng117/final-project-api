@@ -23,11 +23,11 @@ if (process.env.NODE_ENV === "production") {
 
 // create instance of pool with config credentials
 const pool = new Pool({
-  database: process.env.DATABASE,
+  database: "postgres",
   host: process.env.HOST,
-  user: process.env.USER,
+  user: TF_VAR_DB_USERNAME,
   port: 5432,
-  password: process.env.PASSWORD,
+  password: TF_VAR_DB_PASSWORD,
 });
 
 // test endpoint
@@ -37,12 +37,13 @@ app.get("/", (req, res) => {
 
 // endpoint to get one random quote from quotes table in database
 app.get("/quote", (req, res) => {
-  const randomQuoteNumber = Math.ceil(Math.random() * (1640 - 1) + 1);
-  const quoteQuery = `SELECT quote_text,quote_author FROM quotes WHERE quote_id=$1`;
-  pool
-    .query(quoteQuery, [randomQuoteNumber])
-    .then((result) => res.json(result.rows))
-    .catch((error) => res.status(500).json(error));
+  // const randomQuoteNumber = Math.ceil(Math.random() * (1640 - 1) + 1);
+  // const quoteQuery = `SELECT quote_text,quote_author FROM quotes WHERE quote_id=$1`;
+  // pool
+  //   .query(quoteQuery, [randomQuoteNumber])
+  //   .then((result) => res.json(result.rows))
+  //   .catch((error) => res.status(500).json(error));
+  res.send({ quote_text: "john", quote_author: "g" });
 });
 
 app.listen(PORT, () => {
