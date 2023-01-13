@@ -41,7 +41,7 @@ app.get("/quote", (req, res) => {
   const quoteQuery = `SELECT quote_text,quote_author FROM quotes WHERE quote_id=$1`;
   pool
     .query(quoteQuery, [randomQuoteNumber])
-    .then((result) => res.json(result))
+    .then((result) => res.json(result.rows))
     .catch((error) => res.status(500).json(error));
 });
 
