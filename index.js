@@ -23,11 +23,11 @@ if (process.env.NODE_ENV === "production") {
 
 // create instance of pool with config credentials
 const pool = new Pool({
-  database: "postgres",
+  database: process.env.DATABASE,
   host: process.env.HOST,
-  user: TF_VAR_DB_USERNAME,
-  port: 5432,
-  password: TF_VAR_DB_PASSWORD,
+  user: process.env.USER,
+  port: process.env.PORT,
+  password: process.env.PASSWORD,
 });
 
 // test endpoint
