@@ -2,6 +2,8 @@
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
+const https = require("https")
+const fs = require("fs");
 const helmet = require("helmet");
 const PORT = process.env.PORT || 3001;
 const { Pool } = require("pg");
@@ -12,14 +14,23 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 
-//
-app.use(express.static(path.join(__dirname, "build")));
+// ssl certificate config
+const key = fs.readFileSync(__dirname + )
+const cert = fs.readFileSync(__dirname + )
+const options = {
+  key: key,
+  cert: cert
+};
 
-if (process.env.NODE_ENV === "production") {
-  app.get("/*", function (req, res) {
-    res.sendFile(path.join(__dirname, "build", "index.html"));
-  });
-}
+
+//
+// app.use(express.static(path.join(__dirname, "build")));
+
+// if (process.env.NODE_ENV === "production") {
+//   app.get("/*", function (req, res) {
+//     res.sendFile(path.join(__dirname, "build", "index.html"));
+//   });
+// }
 
 // create instance of pool with config credentials
 const pool = new Pool({
@@ -45,6 +56,8 @@ app.get("/quote", (req, res) => {
     .catch((error) => res.status(500).json(error));
 });
 
-app.listen(PORT, () => {
+const server = https.createServer(options, app);
+
+server.listen(PORT, () => {
   console.log("listening on port 3001");
 });
